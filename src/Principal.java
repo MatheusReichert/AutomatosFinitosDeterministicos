@@ -30,7 +30,7 @@ public class Principal {
         teste.montar(3, 'b', 1);
 
         System.out.println(teste.validar("a"));
-
-
+        System.out.println(teste.validar("aaa"));
+        System.out.println(teste.validar("aaaaaaba"));
     }
 }
