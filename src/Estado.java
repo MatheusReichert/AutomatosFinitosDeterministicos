@@ -1,15 +1,27 @@
+import java.util.HashMap;
+
 public class Estado {
 
     Estado(){
-
     }
-    Estado(Estado esquerda, Estado direita) {
-        this.esquerda = esquerda;
-        this.direita= direita;
+
+    Estado(String[] alfabeto) {
+        for (String caminho: alfabeto){
+            proximoEstado.put(caminho, new Estado());
+        }
+    }
+
+    public Estado getProximoEstado(Object elemento){
+       return  proximoEstado.get(elemento);
+    }
+
+    public void setProximoEstado(Object elemento, Estado estado){
+        proximoEstado.put(elemento, estado);
     }
 
     public String id;
-    public Estado esquerda;
-    public Estado direita;
-    public boolean estadoFinal = false;
+    public HashMap<Object, Estado> proximoEstado = new HashMap<Object, Estado>();
+
+    public boolean ehFinal = false;
+
 }

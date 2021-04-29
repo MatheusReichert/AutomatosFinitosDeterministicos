@@ -1,13 +1,12 @@
 public class AFD {
 
     public Estado[] Estados;
-    public Estado[] EstadosIniciais;
+    public Estado EstadoInicial;
     public Estado[] EstadosFinais;
-    public char alfa, beta;
+    public String[] alfabeto;
 
-    AFD(char alfa, char beta){
-        this.alfa = alfa;
-        this.beta = beta;
+    AFD(String[] alfabeto){
+       this.alfabeto = alfabeto;
     }
 
     public void criarEstados(int quantidadeDeEstado) {
@@ -15,42 +14,31 @@ public class AFD {
         Estados = new Estado[quantidadeDeEstado];
         for (int i = 0; i < Estados.length; i++) {
             Estados[i] = new Estado();
-            Estados[i].id = "q"+i;
+            Estados[i].id = Integer.toString(i+1);
         }
 
     }
 
-    public void criarEstadoIniciais(int quantidadeDeEstadoIniciais) {
-        EstadosIniciais = new Estado[quantidadeDeEstadoIniciais];
-
+    public void selecionarEstadoIniciail(int idDoEstadoInicial) {
+        EstadoInicial = new Estado();
+        EstadoInicial = Estados[idDoEstadoInicial - 1];
     }
 
-    public void criarEstadoFinais(int quantidadeDeEstadoFinais) {
+    public void criarEstadosFinais(int quantidadeDeEstadoFinais) {
         EstadosFinais = new Estado[quantidadeDeEstadoFinais];
-
-    }
-
-    public void selecionarEstadosIniciais(int[] numeroDosIniciais) {
-        criarEstadoIniciais(numeroDosIniciais.length);
-
-        for (int i = 0; i < numeroDosIniciais.length; i++) {
-
-            EstadosIniciais[i] = Estados[numeroDosIniciais[i]];
-
-        }
     }
 
     public void selecionarEstadosFinais(int[] numeroDosFinais) {
-        criarEstadoFinais(numeroDosFinais.length);
+        criarEstadosFinais(numeroDosFinais.length);
 
         for (int i = 0; i < numeroDosFinais.length; i++) {
-
-            EstadosFinais[i] = Estados[numeroDosFinais[i]];
-            Estados[numeroDosFinais[i]].estadoFinal = true;
+            EstadosFinais[i] = Estados[numeroDosFinais[i] - 1];
+            Estados[numeroDosFinais[i]- 1 ].ehFinal = true;
         }
+
     }
 
-    public void montar(int estado1, char x, int estado2) {
+    public void montar(int estado1, Object elemento, int estado2) {
         // EstadosDoAutomato[] , lado = EstadosDoAutomato[]
         // δ(q1, a) = q2,
         // δ(q1, b) = q1
@@ -58,52 +46,28 @@ public class AFD {
         // δ(q2, b) = q3
         // δ(q3, a) = q2
         // δ(q3, b) = q1
-
-        if (x == alfa) {
-            Estados[estado1].esquerda = Estados[estado2];
-        }
-        if (x == beta) {
-            Estados[estado1].direita = Estados[estado2];
-        }
-
+        Estados[estado1-1].setProximoEstado(elemento, Estados[estado2-1]);
 
     }
 
     public String validar(String palavra) {
-        boolean validado = false;
+        boolean aceito = false;
+        Estado estadoAtual = EstadoInicial;
 
-        for (int i = 0; i < EstadosIniciais.length; i++) {
-            Estado raiz = EstadosIniciais[0];
-            for (int j = 0; j < palavra.length(); j++) {
-                if (palavra.charAt(j) == alfa) {
-                    if ((raiz.esquerda) != null) {
-                        raiz = raiz.esquerda;
-                        if (raiz.estadoFinal == true) {
-                            validado = true;
-                        } else {
-                            validado = false;
-                        }
-                    } else {
-                        break;
-                    }
+        char[] palavraArray = new char[palavra.length()];
 
-                }
-                if (palavra.charAt(j) == beta) {
-                    if ((raiz.direita) != null) {
-                        raiz = raiz.direita;
-                        if (raiz.estadoFinal == true) {
-                            validado = true;
-                        } else {
-                            validado = false;
-                        }
-                    } else {
-                        break;
-                    }
+        for(int i=0; i < palavra.length(); i++){
+            palavraArray[i]= palavra.charAt(i);
+        }
 
-                }
+
+        for (int i = 0; i < palavra.length(); i++) {
+            if(estadoAtual.getProximoEstado(palavraArray[i]) != null){
+                estadoAtual = estadoAtual.getProximoEstado(palavraArray[i]);
+                aceito = estadoAtual.ehFinal;
             }
         }
-        return validado + "";
+        return aceito + "";
     }
 
 }
