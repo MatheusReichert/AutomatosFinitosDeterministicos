@@ -1,3 +1,6 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class AFD {
 
     public Estado[] Estados;
@@ -14,7 +17,8 @@ public class AFD {
         Estados = new Estado[quantidadeDeEstado];
         for (int i = 0; i < Estados.length; i++) {
             Estados[i] = new Estado();
-            Estados[i].id = Integer.toString(i+1);
+            int ids = i+1;
+            Estados[i].id = "q" + ids;
         }
 
     }
@@ -68,6 +72,28 @@ public class AFD {
             }
         }
         return aceito + "";
+    }
+
+    public ArrayList<String> estadosPercorrido(String palavra) {
+
+        ArrayList<String> caminho = new ArrayList<String>();
+        Estado estadoAtual = EstadoInicial;
+        caminho.add(EstadoInicial.id);
+
+        char[] palavraArray = new char[palavra.length()];
+
+        for(int i=0; i < palavra.length(); i++){
+            palavraArray[i]= palavra.charAt(i);
+        }
+
+
+        for (int i = 0; i < palavra.length(); i++) {
+            if(estadoAtual.getProximoEstado(palavraArray[i]) != null){
+                estadoAtual = estadoAtual.getProximoEstado(palavraArray[i]);
+                caminho.add(estadoAtual.id);
+            }
+        }
+        return  caminho;
     }
 
 }

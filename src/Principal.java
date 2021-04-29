@@ -4,7 +4,7 @@ public class Principal {
     public static void main(String[] args) {
 
         //alfabeto
-        String[] alfabeto = {"a", "b", "c"};
+        String[] alfabeto = {"a", "b"};
         AFD teste = new AFD(alfabeto);
 
         teste.criarEstados(3);
@@ -29,8 +29,15 @@ public class Principal {
         teste.montar(3, 'a', 2);
         teste.montar(3, 'b', 1);
 
+        System.out.println(teste.estadosPercorrido("a"));
         System.out.println(teste.validar("a"));
+
+        System.out.println(teste.estadosPercorrido("aaa"));
         System.out.println(teste.validar("aaa"));
+
+        System.out.println(teste.estadosPercorrido("aaaaaaba"));
         System.out.println(teste.validar("aaaaaaba"));
+
+
     }
 }
