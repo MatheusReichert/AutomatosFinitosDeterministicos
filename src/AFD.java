@@ -1,11 +1,10 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AFD {
 
-    public Estado[] Estados;
-    public Estado EstadoInicial;
-    public Estado[] EstadosFinais;
+    public Estado[] estados;
+    public Estado estadoInicial;
+    public Estado[] estadosFinais;
     public String[] alfabeto;
 
     AFD(String[] alfabeto){
@@ -14,35 +13,36 @@ public class AFD {
 
     public void criarEstados(int quantidadeDeEstado) {
 
-        Estados = new Estado[quantidadeDeEstado];
-        for (int i = 0; i < Estados.length; i++) {
-            Estados[i] = new Estado();
+        estados = new Estado[quantidadeDeEstado];
+        for (int i = 0; i < estados.length; i++) {
+            estados[i] = new Estado();
+            
             int ids = i+1;
-            Estados[i].id = "q" + ids;
+            estados[i].id = "q" + ids;
         }
 
     }
 
     public void selecionarEstadoIniciail(int idDoEstadoInicial) {
-        EstadoInicial = new Estado();
-        EstadoInicial = Estados[idDoEstadoInicial - 1];
+        estadoInicial = new Estado();
+        estadoInicial = estados[idDoEstadoInicial - 1];
     }
 
     public void criarEstadosFinais(int quantidadeDeEstadoFinais) {
-        EstadosFinais = new Estado[quantidadeDeEstadoFinais];
+        estadosFinais = new Estado[quantidadeDeEstadoFinais];
     }
 
     public void selecionarEstadosFinais(int[] numeroDosFinais) {
         criarEstadosFinais(numeroDosFinais.length);
 
         for (int i = 0; i < numeroDosFinais.length; i++) {
-            EstadosFinais[i] = Estados[numeroDosFinais[i] - 1];
-            Estados[numeroDosFinais[i]- 1 ].ehFinal = true;
+            estadosFinais[i] = estados[numeroDosFinais[i] - 1];
+            estados[numeroDosFinais[i]- 1 ].ehFinal = true;
         }
 
     }
 
-    public void montar(int estado1, Object elemento, int estado2) {
+    public void montar(int estadoAtual, Object elemento, int proximoEstado) {
         // EstadosDoAutomato[] , lado = EstadosDoAutomato[]
         // δ(q1, a) = q2,
         // δ(q1, b) = q1
@@ -50,13 +50,13 @@ public class AFD {
         // δ(q2, b) = q3
         // δ(q3, a) = q2
         // δ(q3, b) = q1
-        Estados[estado1-1].setProximoEstado(elemento, Estados[estado2-1]);
+        estados[estadoAtual - 1].setProximoEstado(elemento, estados[ proximoEstado - 1]);
 
     }
 
     public String validar(String palavra) {
         boolean aceito = false;
-        Estado estadoAtual = EstadoInicial;
+        Estado estadoAtual = estadoInicial;
 
         char[] palavraArray = new char[palavra.length()];
 
@@ -77,8 +77,8 @@ public class AFD {
     public ArrayList<String> estadosPercorrido(String palavra) {
 
         ArrayList<String> caminho = new ArrayList<String>();
-        Estado estadoAtual = EstadoInicial;
-        caminho.add(EstadoInicial.id);
+        Estado estadoAtual = estadoInicial;
+        caminho.add(estadoInicial.id);
 
         char[] palavraArray = new char[palavra.length()];
 

@@ -9,8 +9,8 @@ public class Principal {
 
         teste.criarEstados(3);
 
-        int[] EstadosFinais = {2};
-        teste.selecionarEstadosFinais(EstadosFinais);
+        int[] estadosFinais = {2};
+        teste.selecionarEstadosFinais(estadosFinais);
 
         teste.selecionarEstadoIniciail(1);
 
